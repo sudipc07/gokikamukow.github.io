@@ -244,9 +244,9 @@ function plot_jira(target, issues, epic_list, velocity, startDate) {
                 return (box_marginh * 2 + 10 + width) + box_marginh + d.idx * epicbarwidth;
             })
             .attr("y", function(d) {
-                return y(toDate(d.start)) + box_marginv;
+                return y(toDate(d.start));
             })
-            .attr("height", epicboxheight)
+            .attr("height", epicboxheight + box_marginv*2)
             .attr("width", epicbarwidth - box_marginh)
             .style("stroke", '#000')
             .style("fill", '#fff');
