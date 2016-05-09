@@ -1,3 +1,15 @@
+var jiraq = {
+
+    preparedom : function (target_id) {
+        ip = document.createElement('input');
+        ip.text = 'Reload data from JIRA'
+        document.getElementById(target_id).appendChild(ip)
+    }
+
+};
+
+
+
 function jira_call(url, on_success) {
     AJS.$.ajax({
         url: url,
@@ -22,7 +34,6 @@ function get_jira_info(board_name, on_update) {
             if (val.name && val.name.indexOf('Dolby Issue System') > -1) {
                 var jira_url = "https://confluence.dolby.net/kb/plugins/servlet/applinks/proxy?appId=" + val.id + "&path=" + val.url;
 
-                var board_id = null;
                 jira_call(jira_url + "/rest/agile/1.0/board", function(msg) {
                     for (var i = 0; i < msg.values.length; i++) {
                         if (msg.values[i].name === board_name) {
@@ -32,19 +43,34 @@ function get_jira_info(board_name, on_update) {
                     }
                     jira.issues = [];
                     var n = 0;
+                    var issues_results = [];
 
-                    function get_next(startAt, total, on_update) {
-                        jira_call(jira_url + "/rest/agile/1.0/board/" + jira.board.id + "/backlog?jql=issuetype!%3DSub-task&startAt=" + startAt + "&maxResults=100&fields=summary,customfield_10262,epic,fixVersions", function(msg) {
-                            jira.issues = jira.issues.concat(msg.issues);
+                    function get_next(startAt, maxResults, on_update) {
+                        jira_call(jira_url + "/rest/agile/1.0/board/" + jira.board.id + "/backlog?jql=issuetype!%3DSub-task&startAt=" + startAt + "&maxResults=" + maxResults + "&fields=summary,customfield_10262,epic,fixVersions", function(msg) {
+                            issues_results.push(msg);
+                            issues_results.sort(function(a, b) {
+                                return a.startAt - b.startAt
+                            });
+                            jira.issues = [];
+                            for (var i = 0; i < issues_results.length; i++) {
+                                jira.issues = jira.issues.concat(issues_results[i].issues);
+                            }
+                            //jira.issues = jira.issues.concat(msg.issues);
                             total = msg.total;
                             startAt = msg.startAt + msg.issues.length;
                             on_update(jira);
-                            if (startAt < total) {
-                                get_next(startAt, total, on_update)
-                            }
+                            //if (startAt < total) {
+                                //get_next(startAt, total, on_update)
+                            //}
                         });
                     }
-                    get_next(0, 0, on_update);
+                    get_next(0, 100, on_update);
+                    get_next(100, 100, on_update);
+                    get_next(200, 100, on_update);
+                    get_next(300, 100, on_update);
+                    get_next(400, 100, on_update);
+                    get_next(500, 100, on_update);
+                    get_next(600, 100, on_update);
                 });
             }
         });
