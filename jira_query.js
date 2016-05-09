@@ -61,12 +61,7 @@ function get_jira_info(board_name, on_update) {
                             jira.issues = issues;
                             if ((issues.length == msg.total) && !updated) {
                                 updated = true;
-                                console.log('Calling update function')
                                 on_update(jira);
-                            }
-                            console.log(JSON.stringify([msg.startAt, msg.startAt + msg.issues.length, msg.total, issues.length]))
-                            for (var i = 0; i < issues_results.length; i++) {
-                                console.log(JSON.stringify([issues_results[i].startAt, issues_results[i].issues.length, issues_results[i].startAt + issues_results[i].issues.length]))
                             }
                         });
                     }
