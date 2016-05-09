@@ -148,21 +148,22 @@ function plot_jira(target, issues, epic_list, velocity, startDate) {
         var layers = d3.layout.stack()(data);
         var box_marginv = 2;
         var box_marginh = 4;
-        var versions = [];
 
+        var versions = [];
         data.map(function(d) {
             if (versions.indexOf(d[0].Version) < 0) {
                 versions.push(d[0].Version)
             }
         });
+        versions.sort();
 
         var epics = [];
-
         data.map(function(d) {
             if (epics.indexOf(d[0].Epic) < 0) {
                 epics.push(d[0].Epic)
             }
         });
+        epics.sort();
 
         function colors_google(n) {
             var colors_g = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707", "#651067", "#329262", "#5574a6", "#3b3eac"];
