@@ -53,7 +53,9 @@ function get_jira_info(board_name, on_update) {
                             var issues = []
                             jira.issues = [];
                             for (var i = 0; i < issues_results.length; i++) {
-                                issues = issues.concat(issues_results[i].issues);
+                                var start = issues.length - issues_results[0].startAt;
+                                start = start < 0 ? 0 : start;
+                                issues = issues.concat(issues_results[i].issues.slice(start));
                             }
                             jira.issues = issues;
                             if (issues.length == msg.total) {
