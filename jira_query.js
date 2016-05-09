@@ -66,8 +66,8 @@ function get_jira_info(board_name, on_update) {
                         });
                     }
 
-                    for (var i = 0; i < 1000; i+=100) {
-                        get_next(i, i + 100, on_update);    
+                    for (var i = 0; i < 1000; i+=1000) {
+                        get_next(i, 1000, on_update);    
                     }
                 });
             }
