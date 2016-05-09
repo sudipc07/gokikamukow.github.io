@@ -42,7 +42,6 @@ function get_jira_info(board_name, on_update) {
                         }
                     }
                     jira.issues = [];
-                    var n = 0;
                     var issues_results = [];
 
                     function get_next(startAt, maxResults, on_update) {
@@ -57,12 +56,14 @@ function get_jira_info(board_name, on_update) {
                                 issues = issues.concat(issues_results[i].issues);
                             }
                             jira.issues = issues;
-                            startAt = msg.startAt + msg.issues.length;
                             if (issues.length == msg.total) {
                                 console.log('Calling update function')
                                 on_update(jira);
                             }
                             console.log(JSON.stringify([msg.startAt, msg.startAt + msg.issues.length, msg.total, issues.length]))
+                            for (var i = 0; i < issues_results.length; i++) {
+                                console.log(JSON.stringify([issues_results[i].startAt, issues_results[i].issues.length, issues_results[i].startAt + issues_results[i].issues.length]))
+                            }
                         });
                     }
 
