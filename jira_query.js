@@ -51,14 +51,18 @@ function get_jira_info(board_name, on_update) {
                             issues_results.sort(function(a, b) {
                                 return a.startAt - b.startAt
                             });
+                            var issues = []
                             jira.issues = [];
                             for (var i = 0; i < issues_results.length; i++) {
-                                jira.issues = jira.issues.concat(issues_results[i].issues);
+                                issues = issues.concat(issues_results[i].issues);
                             }
+                            jira.issues = issues;
                             startAt = msg.startAt + msg.issues.length;
-                            if (jira.issues.length == msg.total) {
+                            if (issues.length == msg.total) {
+                                console.log('Calling update function')
                                 on_update(jira);
                             }
+                            console.log(JSON.stringify([msg.startAt, msg.startAt + msg.issues.length, msg.total, issues.length]))
                         });
                     }
 
