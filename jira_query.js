@@ -43,6 +43,7 @@ function get_jira_info(board_name, on_update) {
                     }
                     jira.issues = [];
                     var issues_results = [];
+                    var updated = false;
 
                     function get_next(startAt, maxResults, on_update) {
                         jira_call(jira_url + "/rest/agile/1.0/board/" + jira.board.id + "/backlog?jql=issuetype!%3DSub-task&startAt=" + startAt + "&maxResults=" + maxResults + "&fields=summary,customfield_10262,epic,fixVersions", function(msg) {
@@ -58,7 +59,8 @@ function get_jira_info(board_name, on_update) {
                                 issues = issues.concat(issues_results[i].issues.slice(start));
                             }
                             jira.issues = issues;
-                            if (issues.length == msg.total) {
+                            if ((issues.length == msg.total) && !updated) {
+                                updated = true;
                                 console.log('Calling update function')
                                 on_update(jira);
                             }
