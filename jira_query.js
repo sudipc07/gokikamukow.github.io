@@ -62,6 +62,7 @@ function get_jira_info(board_name, on_update) {
                             //if (startAt < total) {
                                 //get_next(startAt, total, on_update)
                             //}
+                            console.log(JSON.stringify([msg.startAt, msg.maxResults, msg.total]));
                         });
                     }
                     get_next(0, 100, on_update);
