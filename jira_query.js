@@ -55,27 +55,16 @@ function get_jira_info(board_name, on_update) {
                             for (var i = 0; i < issues_results.length; i++) {
                                 jira.issues = jira.issues.concat(issues_results[i].issues);
                             }
-                            //jira.issues = jira.issues.concat(msg.issues);
-                            total = msg.total;
                             startAt = msg.startAt + msg.issues.length;
-                            on_update(jira);
-                            //if (startAt < total) {
-                                //get_next(startAt, total, on_update)
-                            //}
-                            console.log(JSON.stringify([msg.startAt, msg.maxResults, msg.total]));
-                            
-                            for (var i = 0; i < issues_results.length; i++) {
-                                console.log(issues_results[i].startAt);
+                            if (jira.issues.length == msg.total) {
+                                on_update(jira);
                             }
                         });
                     }
-                    get_next(0, 100, on_update);
-                    get_next(100, 100, on_update);
-                    get_next(200, 100, on_update);
-                    get_next(300, 100, on_update);
-                    get_next(400, 100, on_update);
-                    get_next(500, 100, on_update);
-                    get_next(600, 100, on_update);
+
+                    for (var i = 0; i < 1000; i+=100) {
+                        get_next(i, i + 100, on_update);    
+                    }
                 });
             }
         });
