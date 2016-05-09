@@ -63,6 +63,10 @@ function get_jira_info(board_name, on_update) {
                                 //get_next(startAt, total, on_update)
                             //}
                             console.log(JSON.stringify([msg.startAt, msg.maxResults, msg.total]));
+                            
+                            for (var i = 0; i < issues_results.length; i++) {
+                                console.log(issues_results[i].startAt);
+                            }
                         });
                     }
                     get_next(0, 100, on_update);
