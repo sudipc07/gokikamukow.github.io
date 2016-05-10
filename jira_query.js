@@ -34,13 +34,21 @@ function get_jira_info(board_name, on_update) {
             if (val.name && val.name.indexOf('Dolby Issue System') > -1) {
                 var jira_url = "https://confluence.dolby.net/kb/plugins/servlet/applinks/proxy?appId=" + val.id + "&path=" + val.url;
 
-                jira_call(jira_url + "/rest/agile/1.0/board", function(msg) {
-                    for (var i = 0; i < msg.values.length; i++) {
+                jira_call(jira_url + "/rest/agile/latest/board?name="+board_name, function(msg) {
+                    if(msg.values.length < 1){
+                        alert("No board found");
+                        return;
+                    } else {
+                        jira.board = msg.values[0];
+                        alert("Board ID: "+jira.board.id);
+                    }
+                    
+                    /*for (var i = 0; i < msg.values.length; i++) {
                         if (msg.values[i].name === board_name) {
                             jira.board = msg.values[i];
                             break;
                         }
-                    }
+                    }*/
                     jira.issues = [];
                     var issues_results = [];
                     var updated = false;
