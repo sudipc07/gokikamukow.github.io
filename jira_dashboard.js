@@ -26,13 +26,14 @@ function get_issue_data(jira_data) {
     var epics = {};
     backlog.map(function(issue) {
         issue = issue[0];
-        if (!epics.hasOwnProperty(issue.Epic)) {
-            epics[issue.Epic] = {
+        var key = issue.Epic + " (" + issue.Version + ")";
+        if (!epics.hasOwnProperty(key)) {
+            epics[key] = {
                 start: cumsum,
                 end: cumsum + issue.y
             };
         } else {
-            epics[issue.Epic].end = cumsum + issue.y;
+            epics[key].end = cumsum + issue.y;
         }
         cumsum += issue.y;
     });
@@ -243,6 +244,11 @@ function plot_jira(target, issues, epic_list, velocity, startDate) {
             return d3.max([1, y(toDate(d.end)) - y(toDate(d.start)) - box_marginv * 2]);
         }
 
+        var ganttkeys = []
+        for (var i = 0; i < epic_list.length; i++) {
+            ganttkeys.push(epic_list[i].epic);
+        }
+
         epiclayers.append("rect")
             .attr("class", "epicboxes")
             .attr("x", function(d) {
@@ -275,7 +281,7 @@ function plot_jira(target, issues, epic_list, velocity, startDate) {
         boxes.append("rect")
             .attr("class", "ganttboxes")
             .attr("x", function(d) {
-                return (box_marginh * 2 + 10 + width) + box_marginh + epic_order.indexOf(d.Epic) * epicbarwidth + 2;
+                return (box_marginh * 2 + 10 + width) + box_marginh + ganttkeys.indexOf(d.Epic + " (" + d.Version + ")") * epicbarwidth + 2;
             })
             .attr("y", function(d) {
                 return y(toDate(d.y0)) + box_marginv;
